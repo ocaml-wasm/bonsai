@@ -117,12 +117,12 @@ let rec do_update_width target state =
         let is_shrinking = Float.(proposed_width < parent_width) in
         match state.side with
         | Left ->
-          let parent_left = parent_rect##.left in
+          let parent_left = Js.to_float parent_rect##.left in
           let pointer_on_left = Float.(pointer_x < parent_left) in
           let pointer_on_right = Float.(pointer_x > parent_left) in
           (is_growing && pointer_on_left) || (is_shrinking && pointer_on_right)
         | Right ->
-          let parent_right = parent_rect##.right in
+          let parent_right = Js.to_float parent_rect##.right in
           let pointer_on_left = Float.(pointer_x < parent_right) in
           let pointer_on_right = Float.(pointer_x > parent_right) in
           (is_growing && pointer_on_right) || (is_shrinking && pointer_on_left)

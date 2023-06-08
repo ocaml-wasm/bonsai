@@ -118,8 +118,8 @@ module Hook = struct
           in
           let target = entry##.target in
           let%map input = Weak_map.get weakmap target in
-          let width = border_box##.inlineSize in
-          let height = border_box##.blockSize in
+          let width = Js.to_float border_box##.inlineSize in
+          let height = Js.to_float border_box##.blockSize in
           let dimensions = { Dimensions.width; height } in
           changes := Reversed_list.((input, dimensions) :: !changes)
         done;

@@ -25,8 +25,8 @@ module T = struct
         f
         [| Js.Unsafe.inject canvas
          ; Js.Unsafe.inject ctx
-         ; Js.Unsafe.inject w
-         ; Js.Unsafe.inject h
+         ; Js.Unsafe.inject (Js.float w)
+         ; Js.Unsafe.inject (Js.float h)
         |]
   ;;
 
@@ -35,19 +35,19 @@ module T = struct
       let (`Hex color) = get_color () in
       ctx##save;
       scale_dpi ele ctx 200.0 200.0;
-      ctx##clearRect 0.0 0.0 100.0 100.0;
+      ctx##clearRect (Js.float 0.0) (Js.float 0.0) (Js.float 100.0) (Js.float 100.0);
       ctx##beginPath;
-      ctx##translate 40.0 40.0;
-      ctx##rotate (Float.of_int state.frame /. 50.0);
-      ctx##translate (-40.0) (-40.0);
-      ctx##rect 20.0 20.0 40.0 40.0;
+      ctx##translate (Js.float 40.0) (Js.float 40.0);
+      ctx##rotate (Js.float (Float.of_int state.frame /. 50.0));
+      ctx##translate (Js.float (-40.0)) (Js.float (-40.0));
+      ctx##rect (Js.float 20.0) (Js.float 20.0) (Js.float 40.0) (Js.float 40.0);
       ctx##.fillStyle := Js.string color;
       ctx##fill;
       state.frame <- state.frame + 1;
       ctx##restore;
       ()
     in
-    Dom_html.window##setInterval (Js.wrap_callback f) 16.0
+    Dom_html.window##setInterval (Js.wrap_callback f) (Js.float 16.0)
   ;;
 
   let init ~get_input _input =

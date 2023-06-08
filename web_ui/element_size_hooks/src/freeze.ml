@@ -7,13 +7,13 @@ module Expert = struct
   let set_width element =
     let rect = element##getBoundingClientRect in
     let width = Js.Optdef.to_option rect##.width in
-    Option.iter width ~f:(set_width element)
+    Option.iter width ~f:(fun w -> set_width element (Js.to_float w))
   ;;
 
   let set_height element =
     let rect = element##getBoundingClientRect in
     let height = Js.Optdef.to_option rect##.height in
-    Option.iter height ~f:(set_height element)
+    Option.iter height ~f:(fun h -> set_height element (Js.to_float h))
   ;;
 
   let reset_width = reset_width
