@@ -62,7 +62,7 @@ module T = struct
         (let options = IntersectionObserver.empty_intersection_observer_options () in
          (* A threshold of [0, 1] means "notify me when it crosses the visible-to-hidden
             boundary" *)
-         options##.threshold := Js.array [| 0.0; 1.0 |];
+         options##.threshold := Js.array [| Js.float 0.0; Js.float 1.0 |];
          let observer =
            new%js IntersectionObserver.intersectionObserver
              (Js.wrap_callback (process_entries state))

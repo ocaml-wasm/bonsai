@@ -31,7 +31,7 @@ module T = struct
         let%map border_box = Js.array_get border_box_arr 0 |> Js.Optdef.to_option in
         (* This assumes writing-mode:horizontal.
            https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry/borderBoxSize *)
-        border_box##.inlineSize, border_box##.blockSize
+        Js.to_float border_box##.inlineSize, Js.to_float border_box##.blockSize
       in
       Option.iter size ~f:(fun (width, height) ->
         state.last_width <- width;

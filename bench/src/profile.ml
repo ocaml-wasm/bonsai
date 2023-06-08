@@ -256,7 +256,7 @@ let profile (T { clock; component; get_inject; interaction; name } : Config.t) =
           (Js.to_array entries##getEntries)
           ~f:(fun entry ->
             let label = Js.to_string entry##.name in
-            let duration = entry##.duration in
+            let duration = Js.to_float entry##.duration in
             performance_entries
               := Measurement.create ~label ~duration :: !performance_entries))
     else

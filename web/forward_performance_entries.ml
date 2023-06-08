@@ -98,8 +98,8 @@ let iter_entries performance_observer_entry_list ~f =
          | Some node_id -> `Bonsai node_id
        in
        let entry_type = entry##.entryType |> Js.to_bytestring in
-       let start_time = entry##.startTime in
-       let duration = entry##.duration in
+       let start_time = Js.to_float entry##.startTime in
+       let duration = Js.to_float entry##.duration in
        f { Entry.label; entry_type; start_time; duration })
 ;;
 
