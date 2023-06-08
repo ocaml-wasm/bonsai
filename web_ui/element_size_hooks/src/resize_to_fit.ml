@@ -87,7 +87,7 @@ module T = struct
     Js.Optdef.case
       (Js.array_get box_array 0)
       (fun () -> ())
-      (fun box -> f { Dims.width = box##.inlineSize; height = box##.blockSize })
+      (fun box -> f { Dims.width = Js.to_float box##.inlineSize; height = Js.to_float box##.blockSize })
   ;;
 
   let observe ~parent ~(state : State.t) =

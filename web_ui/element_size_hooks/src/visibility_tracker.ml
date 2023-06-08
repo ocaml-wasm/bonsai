@@ -77,10 +77,10 @@ let rec get_parent_rects element =
     let%bind parent = Js.Opt.to_option (Dom_html.CoerceTo.element parent) in
     let parent_bb = element##getBoundingClientRect in
     let parent_bb =
-      { Bbox.min_x = parent_bb##.left
-      ; min_y = parent_bb##.top
-      ; max_y = parent_bb##.bottom
-      ; max_x = parent_bb##.right
+      { Bbox.min_x = Js.to_float parent_bb##.left
+      ; min_y = Js.to_float parent_bb##.top
+      ; max_y = Js.to_float parent_bb##.bottom
+      ; max_x = Js.to_float parent_bb##.right
       }
     in
     Some (parent_bb :: get_parent_rects parent)
@@ -91,10 +91,10 @@ let rec get_parent_rects element =
 let get_accurate_vis_bounds (element : Dom_html.element Js.t) =
   let client_bbox =
     let client_bounds = element##getBoundingClientRect in
-    { Bbox.min_x = client_bounds##.left
-    ; min_y = client_bounds##.top
-    ; max_y = client_bounds##.bottom
-    ; max_x = client_bounds##.right
+    { Bbox.min_x = Js.to_float client_bounds##.left
+    ; min_y = Js.to_float client_bounds##.top
+    ; max_y = Js.to_float client_bounds##.bottom
+    ; max_x = Js.to_float client_bounds##.right
     }
   in
   let window_bbox =

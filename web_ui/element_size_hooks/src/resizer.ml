@@ -78,7 +78,7 @@ let rec do_update_width target state =
     let%bind target = Js.Opt.to_option target in
     let%bind parent = get_parent target in
     let rect = parent##getBoundingClientRect in
-    let left = rect##.left in
+    let left = Js.to_float rect##.left in
     let new_width = Int.to_float mouse_x -. left in
     set_width parent new_width;
     return ()

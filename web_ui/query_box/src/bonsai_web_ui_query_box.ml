@@ -421,8 +421,8 @@ let create
              fun (ev : Js_of_ocaml_patches.Dom_html.wheelEvent Js.t) ->
                let comparison =
                  match expand_direction with
-                 | Down -> Float.( < ) ev##.deltaY 0.0
-                 | Up -> Float.( > ) ev##.deltaY 0.0
+                 | Down -> Float.( < ) (Js.to_float ev##.deltaY) 0.0
+                 | Up -> Float.( > ) (Js.to_float ev##.deltaY) 0.0
                in
                Effect.Many
                  [ (if comparison

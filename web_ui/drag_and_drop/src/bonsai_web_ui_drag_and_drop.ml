@@ -247,12 +247,12 @@ let create
               (Js.Opt.to_option event##.currentTarget |> Option.value_exn)##getBoundingClientRect
             in
             let optdef_float x =
-              x |> Js.Optdef.to_option |> Option.value_exn |> Int.of_float
+              x |> Js.Optdef.to_option |> Option.value_exn |> Js.to_float |> Int.of_float
             in
             let width = optdef_float bounding_rect##.width in
             let height = optdef_float bounding_rect##.height in
-            let top = Int.of_float bounding_rect##.top in
-            let left = Int.of_float bounding_rect##.left in
+            let top = Int.of_float (Js.to_float bounding_rect##.top) in
+            let left = Int.of_float (Js.to_float bounding_rect##.left) in
             let size = { Size.width; height } in
             let offset = { Position.x = position.x - left; y = position.y - top } in
             match Bonsai_web.am_within_disabled_fieldset event with
