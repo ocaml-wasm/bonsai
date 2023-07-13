@@ -1,3 +1,4 @@
 (library (name ppx_bonsai_test)
  (libraries core ppxlib ppx_bonsai_expander ppx_let.expander ppx_bonsai)
+ (inline_tests (modes js))
  (preprocess (pps ppx_expect ppx_bonsai ppxlib.metaquot)))

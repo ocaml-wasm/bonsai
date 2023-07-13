@@ -1,4 +1,5 @@
 (library (name uri_parsing_test)
  (libraries base64 core patdiff.expect_test_patdiff expect_test_helpers_core
   base_quickcheck uri_parsing)
+; (inline_tests (modes js))
  (preprocess (pps ppx_jane ppx_typed_fields ppx_quick_test)))

@@ -1,3 +1,4 @@
 (library (name test_bonsai_web_ui_file)
  (libraries bonsai_web_ui_file bonsai_test)
+ (inline_tests (modes js))
  (preprocess (pps ppx_bonsai ppx_jane)))
