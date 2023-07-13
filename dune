@@ -1,0 +1,7 @@
+(env
+ (wasm
+  (env-vars (TESTING_FRAMEWORK inline-test))
+  (binaries (node_wrapper.sh as node))
+  (js_of_ocaml (target wasm)))
+ (_
+  (env-vars (TESTING_FRAMEWORK inline-test))))

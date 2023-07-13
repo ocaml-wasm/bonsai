@@ -3,6 +3,6 @@
  (preprocess (pps ppx_jane ppx_pattern_bind)))
 
 (rule (targets graph.svg) (deps graph_generator.bc.js)
- (action (bash "%{NODE} %{deps} | dot -T svg -ograph.svg")))
+ (action (bash "node %{deps} | dot -T svg -ograph.svg")))
 
 (alias (name DEFAULT) (deps graph.svg))

@@ -1,4 +1,5 @@
 (library (name test_bonsai_web_ui_query_box)
  (libraries bonsai_web_ui_query_box bonsai_web_test fuzzy_match.match
   fuzzy_match.search)
+ (inline_tests (modes js))
  (preprocess (pps ppx_bonsai ppx_jane)))

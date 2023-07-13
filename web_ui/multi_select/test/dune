@@ -1,4 +1,5 @@
 (library (name bonsai_web_ui_multi_select_test)
  (libraries bonsai_web_test bonsai_web_ui_multi_select core
   virtual_dom.vdom_test_helpers)
+ (inline_tests (modes js))
  (preprocess (pps ppx_jane ppx_bonsai)))
