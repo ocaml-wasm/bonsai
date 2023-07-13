@@ -1,4 +1,5 @@
 (library (name bonsai_experimental_dagviz_test)
  (libraries bonsai_experimental_dagviz core bonsai_web_test
   expect_test_helpers_core)
+ (inline_tests (modes js))
  (preprocess (pps ppx_jane ppx_bonsai)))

@@ -1,3 +1,4 @@
 (library (name bonsai_web_ui_gauge_test)
  (libraries bonsai_web bonsai_web_test bonsai_web_ui_gauge)
+ (inline_tests (modes js))
  (preprocess (pps ppx_jane ppx_bonsai)))
