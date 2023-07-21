@@ -341,6 +341,9 @@ let%expect_test "Opening from returned effect and closing by clicking outside." 
         let fake_event =
           object%js
             val key = Js_of_ocaml.Js.string "Escape"
+            val code = Js_of_ocaml.Js.string "Escape"
+            val location = 0
+            val keyCode = 27
           end
         in
         Handle.trigger_hook
