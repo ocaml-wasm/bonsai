@@ -11,8 +11,12 @@ let print_graph c =
   let content = to_dot c in
   let out = Stdlib.open_out "/tmp/foo" in
   Stdlib.output_string out content;
-  Stdlib.flush out;
-  assert (Stdlib.Sys.command "graph-easy /tmp/foo --from graphviz --as boxart" = 0)
+  Stdlib.close_out out;
+  assert (Stdlib.Sys.command "graph-easy --output /tmp/bar /tmp/foo --from graphviz --as boxart" = 0);
+  let res = Stdlib.open_in "/tmp/bar" in
+  Stdlib.(print_string (really_input_string res (in_channel_length res)));
+  Stdlib.flush stdout;
+  Stdlib.close_in res
 ;;
 
 let%test_module ("regression" [@tags "no-js"]) =
