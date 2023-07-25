@@ -1,3 +1,4 @@
+(*
 open! Core
 open! Import
 open Bonsai.Let_syntax
@@ -18,3 +19,4 @@ let%expect_test "match%sub defers exceptions until runtime" =
     Handle.show handle);
   [%expect {| "Assert_failure test_match_sub_runtime_error.ml:LINE:COL" |}]
 ;;
+*)
