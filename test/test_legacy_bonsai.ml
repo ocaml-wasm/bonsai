@@ -124,7 +124,7 @@ let%expect_test "enum with action handling `Warn" =
       ];
     [%expect
       {|
-               (lib/bonsai/src/proc.ml:84:14
+               (src/proc.ml:82:14
                 "An action sent to an [of_module1] has been dropped because its input was not present. This happens when the [of_module1] is inactive when it receives a message."
                 (action Increment))
                pure 3|}];
