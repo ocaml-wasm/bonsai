@@ -1,6 +1,6 @@
 (env
  (wasm
   (env-vars (TESTING_FRAMEWORK inline-test))
-  (js_of_ocaml (target wasm)))
+  (js_of_ocaml (flags :standard --no-inline) (target wasm)))
  (_
   (env-vars (TESTING_FRAMEWORK inline-test))))
