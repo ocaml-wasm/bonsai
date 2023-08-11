@@ -147,7 +147,7 @@ let component (type key cmp) (key : (key, cmp) Bonsai.comparator) =
     module Dom_element = struct
       type t = Dom_html.element Js.t
 
-      let equal = phys_equal
+      let equal = Js.strict_equals
       let sexp_of_t = sexp_of_opaque
     end
 
