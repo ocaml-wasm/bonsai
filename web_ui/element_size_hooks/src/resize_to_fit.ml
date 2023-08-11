@@ -94,11 +94,11 @@ module T = struct
     let on_resize_observed entries _observer =
       for i = 0 to entries##.length - 1 do
         let entry = Js.Optdef.get (Js.array_get entries i) (fun () -> assert false) in
-        if phys_equal (state.me :> Dom.node Js.t) entry##.target
+        if Js.strict_equals (state.me :> Dom.node Js.t) entry##.target
         then
           (* use border-box for me *)
           with_size entry##.borderBoxSize ~f:(fun dims -> state.my_dims <- dims)
-        else if phys_equal parent entry##.target
+        else if Js.strict_equals parent entry##.target
         then
           (* use content-box for parent *)
           with_size entry##.contentBoxSize ~f:(fun dims -> state.parent_dims <- dims)
