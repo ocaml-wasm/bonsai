@@ -1,4 +1,9 @@
 (executables (names main)
+ (modes js)
  (libraries bonsai_web bonsai_web_ui_form codicons fuzzy_match.match
   js_clipboard)
  (preprocess (pps ppx_jane ppx_bonsai ppx_css)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html)))

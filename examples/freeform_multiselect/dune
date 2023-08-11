@@ -1,4 +1,5 @@
 (executables (names main)
+ (modes js)
  (libraries bonsai_web bonsai_web_ui_freeform_multiselect)
  (preprocess (pps js_of_ocaml-ppx ppx_bonsai ppx_jane)))
 
@@ -8,3 +9,7 @@
  (action (bash "cat %{deps} > %{targets}")))
 
 (alias (name DEFAULT) (deps style.css))
+
+(alias
+ (name all)
+ (deps (glob_files *.html) (glob_files *.css)))

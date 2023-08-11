@@ -1,4 +1,9 @@
 (executables (names main)
+ (modes js)
  (preprocess (pps js_of_ocaml-ppx ppx_bonsai ppx_jane))
  (libraries core dygraph dygraph_jane bonsai_web virtual_dom.input_widgets
   timezone))
+
+(alias
+ (name all)
+ (deps (glob_files *.html)))

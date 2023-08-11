@@ -1,4 +1,9 @@
 (executables (names main)
+ (modes js)
  (libraries async_rpc_kernel bonsai_web expect_test_helpers_core
   ldiffable_polling_state_rpc_response)
  (preprocess (pps ppx_jane ppx_diff.ppx_diff ppx_bonsai)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html)))

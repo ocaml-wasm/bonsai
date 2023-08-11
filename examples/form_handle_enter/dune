@@ -1,4 +1,9 @@
 (executables (names main)
+ (modes js)
  (libraries bonsai_web bonsai_web_ui_form bonsai_web_ui_auto_generated
-  bonsai_web_ui_notifications)
+  bonsai_web_ui_notifications zarith_stubs_js)
  (preprocess (pps ppx_bonsai ppx_css ppx_jane)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html)))

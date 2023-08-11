@@ -1,3 +1,8 @@
 (executables (names main)
+ (modes js)
  (libraries bonsai bonsai_web bonsai_web_ui_gauge tailwind_colors)
  (preprocess (pps ppx_jane ppx_css ppx_bonsai)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html)))
