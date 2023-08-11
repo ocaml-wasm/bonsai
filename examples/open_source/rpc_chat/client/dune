@@ -2,3 +2,7 @@
  (libraries async_kernel async_js core_kernel.composition_infix core
   bonsai_web bonsai_chat_open_source_common virtual_dom.input_widgets)
  (preprocess (pps js_of_ocaml-ppx ppx_bonsai ppx_jane)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html) (glob_files *.css)))

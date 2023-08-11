@@ -1,3 +1,9 @@
 (executables (names main)
+ (modes js)
  (libraries bonsai_web bonsai_web_ui_modal draft_modal)
  (preprocess (pps ppx_bonsai ppx_jane)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html)))
+

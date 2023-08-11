@@ -1,3 +1,8 @@
 (executables (names main)
  (libraries bonsai_web bonsai_partial_render_table_example)
+ (modes js)
  (preprocess (pps ppx_jane)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html) (glob_files *.css)))

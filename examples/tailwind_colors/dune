@@ -1,2 +1,7 @@
 (executables (names main) (libraries bonsai_web tailwind_colors)
+ (modes js)
  (preprocess (pps ppx_jane)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html) (glob_files *.css)))

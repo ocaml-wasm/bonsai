@@ -1,2 +1,7 @@
 (executables (names main) (libraries bonsai_web incr_dom.vdom_file_download)
+ (modes js)
  (preprocess (pps ppx_jane)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html)))

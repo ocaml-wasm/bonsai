@@ -1,5 +1,10 @@
 (executables (names main)
+ (modes js)
  (libraries async_js polling_state_rpc async_kernel
   bonsai_examples_mouse_position_lib bonsai_web core
   bonsai_examples_mouse_position_common)
  (preprocess (pps ppx_jane)))
+
+(alias
+ (name all)
+ (deps (glob_files *.html) (glob_files *.css)))
