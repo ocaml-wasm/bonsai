@@ -32,7 +32,9 @@ include Vdom.Attr.Hooks.Make (struct
          Or maybe, we only push the element down if it overflows at the top, but not up? *)
     let offset =
       (* Remove the transform from the offset, since we're setting it here. *)
-      let total_offset = element##getBoundingClientRect##.left |> Float.to_int in
+      let total_offset =
+        element##getBoundingClientRect##.left |> Js.to_float |> Float.to_int
+      in
       total_offset - state.current_transform - frame_offset
     in
     let total_width = offset + element_width + safe_screen_margin in

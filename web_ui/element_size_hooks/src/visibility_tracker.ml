@@ -13,7 +13,11 @@ module Bbox = struct
   [@@deriving sexp, equal]
 
   let of_client_rect (box : Dom_html.clientRect Js.t) =
-    { min_x = box##.left; min_y = box##.top; max_x = box##.right; max_y = box##.bottom }
+    { min_x = Js.to_float box##.left
+    ; min_y = Js.to_float box##.top
+    ; max_x = Js.to_float box##.right
+    ; max_y = Js.to_float box##.bottom
+    }
   ;;
 
   let width t = t.max_x -. t.min_x
