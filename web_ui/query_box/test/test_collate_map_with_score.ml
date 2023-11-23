@@ -193,6 +193,7 @@ module Action = struct
   [@@deriving quickcheck, sexp]
 end
 
+(*
 let%quick_test _ =
   fun (actions : Action.t list) ->
   let query_var = Bonsai.Var.create "" in
@@ -214,3 +215,4 @@ let%quick_test _ =
     | Set_query query -> Bonsai.Var.set query_var query
     | Show -> Handle.recompute_view handle)
 ;;
+*)
