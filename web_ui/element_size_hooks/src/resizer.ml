@@ -104,6 +104,7 @@ let rec do_update_width target state =
     let%bind parent = get_parent target in
     let parent_rect = parent##getBoundingClientRect in
     let%bind parent_width = Js.Optdef.to_option parent_rect##.width in
+    let parent_width = Js.to_float parent_width in
     let%bind new_width =
       let operation =
         match state.side with
