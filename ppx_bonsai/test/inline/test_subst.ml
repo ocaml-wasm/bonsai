@@ -940,20 +940,23 @@ let%test_module "Destructuring vs. no destructuring criteria." =
           BODY];
       [%expect
         {|
-        Let_syntax.arr
-          ~here:{
-                  Ppx_here_lib.pos_fname = "_none_";
-                  pos_lnum = 1;
-                  pos_cnum = (-1);
-                  pos_bol = 0
-                }
-          (Let_syntax.cutoff DESTRUCT
-             ~equal:(fun (((__old_for_cutoff__071_, _) : t), __old_for_cutoff__069_)
-                       (((__new_for_cutoff__070_, _) : t), __new_for_cutoff__068_) ->
-                       (phys_equal __old_for_cutoff__071_ __new_for_cutoff__070_) &&
-                         (phys_equal __old_for_cutoff__069_ __new_for_cutoff__068_)))
-          ~f:(fun (((b, _) : t), c) -> BODY)
-        |}]
+    Let_syntax.arr
+      ~here:{
+              Ppx_here_lib.pos_fname = "_none_";
+              pos_lnum = 1;
+              pos_cnum = (-1);
+              pos_bol = 0
+            }
+      (Let_syntax.cutoff DESTRUCT
+         ~equal:(fun (((__old_for_cutoff__071_, _) : t), __old_for_cutoff__069_)
+                   ->
+                   fun
+                     (((__new_for_cutoff__070_, _) : t), __new_for_cutoff__068_)
+                     ->
+                     (phys_equal __old_for_cutoff__071_ __new_for_cutoff__070_)
+                       &&
+                       (phys_equal __old_for_cutoff__069_ __new_for_cutoff__068_)))
+      ~f:(fun (((b, _) : t), c) -> BODY) |}]
     ;;
 
     let%expect_test "'arbitrary' deep ignoring of at least one pattern results in \
