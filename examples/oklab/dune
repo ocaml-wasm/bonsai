@@ -1,5 +1,5 @@
 (executables (names main)
- (modes js)
+ (modes js wasm)
  (libraries bonsai_web oklab bonsai_web_ui_form kado)
  (preprocess (pps ppx_jane ppx_css ppx_typed_fields ppx_bonsai)))
 

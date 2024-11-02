@@ -1,4 +1,4 @@
 (library (name jsoo_weak_collections_test)
  (libraries core jsoo_weak_collections)
- (inline_tests (modes js))
+ (inline_tests (modes js wasm))
  (preprocess (pps ppx_jane js_of_ocaml-ppx)))

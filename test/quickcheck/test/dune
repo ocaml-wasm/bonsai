@@ -1,5 +1,5 @@
 (library (name bonsai_quickcheck_test) (public_name bonsai.quickcheck_test)
  (libraries bonsai bonsai_test core
   expect_test_helpers_core)
- (inline_tests (modes js))
+ (inline_tests (modes js wasm))
  (preprocess (pps ppx_jane)))

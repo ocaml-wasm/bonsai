@@ -1,5 +1,5 @@
 (executables (names main)
- (modes js)
+ (modes js wasm)
  (libraries bonsai bonsai_web bonsai_web_ui_gauge tailwind_colors)
  (preprocess (pps ppx_jane ppx_css ppx_bonsai)))
 

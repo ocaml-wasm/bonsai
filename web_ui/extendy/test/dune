@@ -1,4 +1,4 @@
 (library (name bonsai_web_ui_extendy_test)
  (libraries bonsai_web_ui_extendy bonsai_web_test core)
- (inline_tests (modes js))
+ (inline_tests (modes js wasm))
  (preprocess (pps ppx_jane)))

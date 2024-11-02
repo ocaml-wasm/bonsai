@@ -1,6 +1,6 @@
 (executables (names main)
  (libraries async_kernel bonsai bonsai_web_ui_search_bar core)
- (modes js)
+ (modes js wasm)
  (preprocess (pps ppx_bonsai ppx_jane ppx_pattern_bind)))
 
 (rule (targets style.css)

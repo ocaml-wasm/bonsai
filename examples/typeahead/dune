@@ -1,5 +1,5 @@
 (executables (names main) (libraries bonsai_web bonsai_web_ui_typeahead)
- (modes js)
+ (modes js wasm)
  (preprocess (pps js_of_ocaml-ppx ppx_bonsai ppx_jane)))
 
 (rule (targets style.css)

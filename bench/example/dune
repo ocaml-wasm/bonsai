@@ -1,4 +1,4 @@
 (executables (names main)
  (libraries bonsai bonsai_bench incr_dom.javascript_profiling js_of_ocaml)
- (modes js)
+ (modes js wasm)
  (preprocess (pps ppx_bonsai ppx_jane js_of_ocaml-ppx)))

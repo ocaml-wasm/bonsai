@@ -1,4 +1,4 @@
-(executables (names test) (modes js) (preprocess (pps ppx_let ppx_bonsai)))
+(executables (names test) (modes js wasm) (preprocess (pps ppx_let ppx_bonsai)))
 
 (alias
  (name all)

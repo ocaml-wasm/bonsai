@@ -1,5 +1,5 @@
 (executables (names main)
- (modes js)
+ (modes js wasm)
  (libraries bonsai_web bonsai_web_ui_query_box bonsai_web_ui_form)
  (preprocess (pps ppx_jane ppx_bonsai ppx_css ppx_typed_fields)))
 

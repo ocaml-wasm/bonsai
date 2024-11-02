@@ -1,6 +1,6 @@
 (executables (names main)
  (libraries bonsai_web bonsai_partial_render_table_example)
- (modes js)
+ (modes js wasm)
  (preprocess (pps ppx_jane)))
 
 (alias

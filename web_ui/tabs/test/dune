@@ -1,5 +1,5 @@
 (library (name bonsai_web_ui_tabs_test)
  (libraries bonsai_web_ui_tabs patdiff.expect_test_patdiff bonsai_web_test
   core)
- (inline_tests (modes js))
+ (inline_tests (modes js wasm))
  (preprocess (pps ppx_jane ppx_bonsai)))

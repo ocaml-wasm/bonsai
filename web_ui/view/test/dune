@@ -1,4 +1,4 @@
 (library (name bonsai_web_ui_view_test)
  (libraries bonsai_web bonsai_web_test kado core expect_test_helpers_core)
- (inline_tests (modes js))
+ (inline_tests (modes js wasm))
  (preprocess (pps ppx_jane ppx_bonsai)))

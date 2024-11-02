@@ -1,5 +1,5 @@
 (executables (names main)
- (modes js)
+ (modes js wasm)
  (libraries async_kernel async_js bonsai_web core favicon_svg
   virtual_dom.input_widgets)
  (preprocess

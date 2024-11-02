@@ -1,5 +1,5 @@
 (executables (names main) (libraries bonsai_web virtual_dom.keyboard)
- (modes js)
+ (modes js wasm)
  (preprocess (pps ppx_jane ppx_bonsai ppx_css)))
 
 (alias

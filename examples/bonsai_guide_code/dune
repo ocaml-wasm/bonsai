@@ -3,7 +3,7 @@
   diffable timezone)
  (preprocess
   (pps js_of_ocaml-ppx ppx_typed_fields ppx_bonsai ppx_css ppx_jane))
- (modes js)
+ (modes js wasm)
  (js_of_ocaml (javascript_files ./resize_iframe.js)))
 
 (alias

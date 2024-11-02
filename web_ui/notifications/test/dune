@@ -1,5 +1,5 @@
 (library (name bonsai_web_ui_notifications_test)
  (libraries bonsai bonsai_web bonsai_web_ui_notifications bonsai_web_test
   core)
- (inline_tests (modes js))
+ (inline_tests (modes js wasm))
  (preprocess (pps ppx_jane ppx_bonsai)))

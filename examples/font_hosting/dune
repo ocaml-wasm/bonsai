@@ -1,5 +1,5 @@
 (executables (names main) (libraries bonsai_web)
- (modes js)
+ (modes js wasm)
  (preprocess (pps ppx_jane ppx_css)))
 
 (alias

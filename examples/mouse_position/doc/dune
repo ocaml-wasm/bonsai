@@ -1,5 +1,5 @@
 (executables (names graph_generator)
- (modes js)
+ (modes js wasm)
  (libraries bonsai_examples_mouse_position_lib bonsai)
  (preprocess (pps ppx_jane ppx_pattern_bind)))
 

@@ -1,5 +1,5 @@
 (library (name bonsai_web_ui_url_var_test)
  (libraries bonsai_web_ui_url_var bonsai_web uri_parsing_test core
   base_quickcheck expect_test_helpers_core)
-; (inline_tests (modes js))
+; (inline_tests (modes js wasm))
  (preprocess (pps ppx_jane ppx_typed_fields)))

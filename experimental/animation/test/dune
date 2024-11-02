@@ -1,4 +1,4 @@
 (library (name bonsai_experimental_animation_test)
  (libraries bonsai_experimental_animation core expect_test_helpers_core)
- (inline_tests (modes js))
+ (inline_tests (modes js wasm))
  (preprocess (pps ppx_jane)))

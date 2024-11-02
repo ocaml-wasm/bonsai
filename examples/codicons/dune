@@ -1,5 +1,5 @@
 (executables (names main)
- (modes js)
+ (modes js wasm)
  (libraries bonsai_web bonsai_web_ui_form codicons fuzzy_match.match
   js_clipboard)
  (preprocess (pps ppx_jane ppx_bonsai ppx_css)))

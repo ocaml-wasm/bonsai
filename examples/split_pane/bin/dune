@@ -1,5 +1,5 @@
 (executables (names main)
- (modes js)
+ (modes js wasm)
  (libraries async_js bonsai_web bonsai_web_ui_split_pane_example)
  (preprocess (pps ppx_jane)))
 

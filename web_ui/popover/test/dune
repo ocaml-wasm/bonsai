@@ -1,5 +1,5 @@
 (library (name bonsai_web_ui_popover_test)
  (libraries bonsai_web_ui_popover bonsai_web bonsai_web_test
   virtual_dom.vdom_test_helpers core)
- (inline_tests (modes js))
+ (inline_tests (modes js wasm))
  (preprocess (pps ppx_jane ppx_bonsai js_of_ocaml-ppx)))

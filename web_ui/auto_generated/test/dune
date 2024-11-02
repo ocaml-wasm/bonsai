@@ -1,5 +1,5 @@
 (library (name bonsai_web_ui_auto_generated_test)
  (preprocess (pps ppx_bonsai ppx_jane))
- (inline_tests (modes js))
+ (inline_tests (modes js wasm))
  (libraries bonsai_web_ui_auto_generated bonsai_web_ui_form bonsai_web
   bonsai_web_test core virtual_dom zarith_stubs_js))

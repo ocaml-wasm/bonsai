@@ -1,5 +1,5 @@
 (executables (names main)
- (modes js)
+ (modes js wasm)
  (libraries bonsai_web bonsai_web_ui_form bonsai_web_ui_auto_generated
   bonsai_web_ui_notifications zarith_stubs_js)
  (preprocess (pps ppx_bonsai ppx_css ppx_jane)))

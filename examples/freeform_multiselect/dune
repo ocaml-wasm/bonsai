@@ -1,5 +1,5 @@
 (executables (names main)
- (modes js)
+ (modes js wasm)
  (libraries bonsai_web bonsai_web_ui_freeform_multiselect)
  (preprocess (pps js_of_ocaml-ppx ppx_bonsai ppx_jane)))
 

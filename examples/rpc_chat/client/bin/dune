@@ -1,5 +1,5 @@
 (executables (names main)
- (modes js)
+ (modes js wasm)
  (libraries async_js bonsai_examples_rpc_chat_client)
  (preprocess (pps js_of_ocaml-ppx ppx_css ppx_jane)))
 
