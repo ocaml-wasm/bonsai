@@ -190,7 +190,7 @@ let%expect_test "appearance of dragged item and preview item while drag is happe
     +|       style={
     +|         width: 0px;
     +|         height: 0px;
-    +|         transform: translateY(0px) translateX(0px);
+    +|         transform: translateY(0.px) translateX(0.px);
     +|       }>
     +|    <div class="kanban_item_hash_replaced_in_test"> todo 1 </div>
     +|  </div>
@@ -284,7 +284,7 @@ let%expect_test "appearance of dragged item and preview item while drag is happe
              style={
                width: 0px;
                height: 0px;
-               transform: translateY(0px) translateX(0px); |}];
+               transform: translateY(0.px) translateX(0.px); |}];
   run handle Finish_drag;
   Handle.show_diff handle;
   [%expect
@@ -329,7 +329,7 @@ let%expect_test "appearance of dragged item and preview item while drag is happe
     -|       style={
     -|         width: 0px;
     -|         height: 0px;
-    -|         transform: translateY(0px) translateX(0px);
+    -|         transform: translateY(0.px) translateX(0.px);
     -|       }>
     -|    <div class="kanban_item_hash_replaced_in_test"> todo 1 </div>
     -|  </div>

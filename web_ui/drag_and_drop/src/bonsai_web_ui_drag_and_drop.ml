@@ -21,8 +21,8 @@ stylesheet
 
 module Position = struct
   type t =
-    { x : int
-    ; y : int
+    { x : float
+    ; y : float
     }
   [@@deriving sexp, equal]
 end
@@ -136,11 +136,11 @@ module For_testing = struct
       | Start_drag source ->
         [ Action.Started_drag
             { source = Sexp.of_string source |> Source.t_of_sexp
-            ; offset = { x = 0; y = 0 }
-            ; position = { x = 0; y = 0 }
+            ; offset = { x = 0.; y = 0. }
+            ; position = { x = 0.; y = 0. }
             ; size = { width = 0; height = 0 }
             }
-        ; Action.Mouse_moved { x = 0; y = 0 }
+        ; Action.Mouse_moved { x = 0.; y = 0. }
         ]
       | Set_target (Some target) ->
         [ Set_target (Some (Sexp.of_string target |> Target.t_of_sexp)) ]
@@ -242,7 +242,7 @@ let create
     fun ~id ->
       Vdom.Attr.many
         [ Vdom.Attr.on_pointerdown (fun event ->
-            let position = { Position.x = event##.clientX; y = event##.clientY } in
+            let position = { Position.x = Js.to_float event##.clientX; y = Js.to_float event##.clientY } in
             let bounding_rect =
               (Js.Opt.to_option event##.currentTarget |> Option.value_exn)##getBoundingClientRect
             in
@@ -251,10 +251,10 @@ let create
             in
             let width = optdef_float bounding_rect##.width in
             let height = optdef_float bounding_rect##.height in
-            let top = Int.of_float (Js.to_float bounding_rect##.top) in
-            let left = Int.of_float (Js.to_float bounding_rect##.left) in
+            let top = Js.to_float bounding_rect##.top in
+            let left = Js.to_float bounding_rect##.left in
             let size = { Size.width; height } in
-            let offset = { Position.x = position.x - left; y = position.y - top } in
+            let offset = { Position.x = position.x -. left; y = position.y -. top } in
             match Bonsai_web.am_within_disabled_fieldset event with
             | true -> Effect.Ignore
             | false -> inject [ Started_drag { source = id; offset; position; size } ])
@@ -311,7 +311,7 @@ let create
               It makes sense that client coordinates is correct because the
               dragged element itself uses fixed positioning, which is roughly
               equivalent to client coordinates.  *)
-        let position = { Position.x = event##.clientX; y = event##.clientY } in
+        let position = { Position.x = Js.to_float event##.clientX; y = Js.to_float event##.clientY } in
         let path = Js.to_array event##composedPath |> Array.to_list in
         let target =
           List.find_map path ~f:(fun element ->
@@ -376,8 +376,8 @@ let dragged_element t ~f =
     let%sub item = f source in
     let%arr { position; offset; size; _ } = dragging
     and item = item in
-    let x = position.x - offset.x in
-    let y = position.y - offset.y in
+    let x = position.x -. offset.x in
+    let y = position.y -. offset.y in
     Vdom.Node.div
       ~attrs:
         [ Vdom.Attr.(
@@ -388,7 +388,7 @@ let dragged_element t ~f =
                   @> height (`Px size.height)
                   @> create
                        ~field:"transform"
-                       ~value:[%string "translateY(%{y#Int}px) translateX(%{x#Int}px)"]))
+                       ~value:[%string "translateY(%{y#Float}px) translateX(%{x#Float}px)"]))
         ]
       [ item ]
 ;;

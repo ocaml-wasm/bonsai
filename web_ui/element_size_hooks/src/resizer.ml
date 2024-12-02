@@ -151,7 +151,7 @@ module T = struct
   let init side element =
     let state = State.create ~side () in
     let on_pointer_move _ event =
-      State.set_pointer_x state (Float.of_int event##.clientX)
+      State.set_pointer_x state (Js.to_float event##.clientX)
     in
     let on_pointer_up _ _ =
       set_cursor "initial";
@@ -165,8 +165,8 @@ module T = struct
       (* We use currentTarget to ensure it is the node we attached the event
          listener to instead of a child node *)
       let target = event##.currentTarget in
-      let clientX : int = event##.clientX in
-      State.set_last_pointer_x state (Some (Float.of_int clientX));
+      let clientX = event##.clientX in
+      State.set_last_pointer_x state (Some (Js.to_float clientX));
       State.on_pointer_event ~event:Move state Dom_html.document ~f:on_pointer_move;
       State.on_pointer_event ~event:Up state Dom_html.document ~f:on_pointer_up;
       State.schedule state ~f:(fun _ -> do_update_width target state);

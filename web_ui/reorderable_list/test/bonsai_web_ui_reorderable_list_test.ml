@@ -97,13 +97,12 @@ let%expect_test "re-arrange" =
     +|    <div style={ transform: translateY(0px) translateX(0px); }> 1 </div>
     -|    <div style={ transform: translateY(1px) translateX(0px); }> 1 </div>
     -|    <div style={ transform: translateY(2px) translateX(0px); }> 2 </div>
-    -|  </div>
     +|    <div style={ transform: translateY(1px) translateX(0px); }> 2 </div>
     +|    <div data-drag-target="0" style={ transform: translateY(0px) translateX(0px); }> </div>
     +|    <div data-drag-target="1" style={ transform: translateY(1px) translateX(0px); }> </div>
     +|    <div data-drag-target="2" style={ transform: translateY(2px) translateX(0px); }> </div>
-    +|  </div>
-    +|  <div style={ transform: translateY(0px) translateX(0px); }> 0 </div>
+        </div>
+    +|  <div style={ transform: translateY(0.px) translateX(0.px); }> 0 </div>
       </div> |}];
   dnd_action handle (Set_target (Some "2"));
   Handle.show_diff handle;
@@ -124,7 +123,7 @@ let%expect_test "re-arrange" =
           <div data-drag-target="1" style={ transform: translateY(1px) translateX(0px); }> </div>
           <div data-drag-target="2" style={ transform: translateY(2px) translateX(0px); }> </div>
         </div>
-        <div style={ transform: translateY(0px) translateX(0px); }> 0 </div>
+        <div style={ transform: translateY(0.px) translateX(0.px); }> 0 </div>
       </div> |}];
   dnd_action handle Finish_drag;
   Handle.show_diff handle;
@@ -145,7 +144,7 @@ let%expect_test "re-arrange" =
     -|    <div data-drag-target="2" style={ transform: translateY(2px) translateX(0px); }> </div>
     +|    <div style={ transform: translateY(2px) translateX(0px); }> 2 </div>
         </div>
-    -|  <div style={ transform: translateY(0px) translateX(0px); }> 0 </div>
+    -|  <div style={ transform: translateY(0.px) translateX(0.px); }> 0 </div>
       </div> |}]
 ;;
 
@@ -165,7 +164,7 @@ let%expect_test "drop onto empty list" =
     +|  <div>
     +|    <div data-drag-target="0" style={ transform: translateY(0px) translateX(0px); }> </div>
     +|  </div>
-    +|  <div style={ transform: translateY(0px) translateX(0px); }> 0 </div>
+    +|  <div style={ transform: translateY(0.px) translateX(0.px); }> 0 </div>
       </div> |}];
   dnd_action handle (Set_target (Some "10"));
   Handle.show_diff handle;
@@ -183,7 +182,7 @@ let%expect_test "drop onto empty list" =
     -|  <div>
     -|    <div data-drag-target="0" style={ transform: translateY(0px) translateX(0px); }> </div>
     -|  </div>
-    -|  <div style={ transform: translateY(0px) translateX(0px); }> 0 </div>
+    -|  <div style={ transform: translateY(0.px) translateX(0.px); }> 0 </div>
     +|  <div> </div>
       </div> |}]
 ;;
@@ -209,7 +208,7 @@ let%expect_test "add item from outside the list" =
     +|    <div data-drag-target="1" style={ transform: translateY(1px) translateX(0px); }> </div>
     +|    <div data-drag-target="2" style={ transform: translateY(2px) translateX(0px); }> </div>
         </div>
-    +|  <div style={ transform: translateY(0px) translateX(0px); }> 10 </div>
+    +|  <div style={ transform: translateY(0.px) translateX(0.px); }> 10 </div>
       </div> |}];
   dnd_action handle (Set_target (Some "1"));
   Handle.show_diff handle;
@@ -228,7 +227,7 @@ let%expect_test "add item from outside the list" =
             <div data-drag-target="1" style={ transform: translateY(1px) translateX(0px); }> </div>
             <div data-drag-target="2" style={ transform: translateY(2px) translateX(0px); }> </div>
           </div>
-          <div style={ transform: translateY(0px) translateX(0px); }> 10 </div>
+          <div style={ transform: translateY(0.px) translateX(0.px); }> 10 </div>
         </div> |}];
   dnd_action handle Finish_drag;
   Handle.show_diff handle;
@@ -249,7 +248,7 @@ let%expect_test "add item from outside the list" =
     -|    <div data-drag-target="2" style={ transform: translateY(2px) translateX(0px); }> </div>
     +|    <div style={ transform: translateY(2px) translateX(0px); }> 2 </div>
         </div>
-    -|  <div style={ transform: translateY(0px) translateX(0px); }> 10 </div>
+    -|  <div style={ transform: translateY(0.px) translateX(0.px); }> 10 </div>
       </div> |}]
 ;;
 
