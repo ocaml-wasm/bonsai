@@ -109,11 +109,11 @@ let create
           (_, _, items, max_visible_items)
           model
           action
-          ->
+        ->
         let suggestion_list_state =
           (* We normalize which item is selected in case the list has changed
-                 since the last action. Normalization just means setting the
-                 selected key to the closest thing that actually exists. *)
+             since the last action. Normalization just means setting the
+             selected key to the closest thing that actually exists. *)
           match model.suggestion_list_state with
           | Selected key ->
             select_key
@@ -412,9 +412,7 @@ let create
             list of items (or vice versa), we want to keep the list open. Thus,
             we check whether the relatedTarget of the event is one of those two
             elements, in which case we don't close the list. *)
-         match
-           Option.bind (Js.Optdef.to_option ev##.relatedTarget) ~f:Js.Opt.to_option
-         with
+         match Js.Opt.to_option ev##.relatedTarget with
          | Some related_target ->
            let id = Js.to_string related_target##.id in
            if String.equal id suggestion_container_id || String.equal id input_id
@@ -574,30 +572,30 @@ module Collate_map_with_score = struct
         array
         ~init:empty_result
         ~f:(fun index acc (key, data, preprocessed) ->
-        let score =
-          (* If the item was already filtered out by a previous query, we can
+          let score =
+            (* If the item was already filtered out by a previous query, we can
                keep filtering it out. If instead it was filtered out by a query
                that have since discarded (or, possibly, it was never filtered
                out), then we need to re-evaluate the score. *)
-          if filtered_out_at_index.(index) < num_queries
-          then 0
-          else (
-            let score = score query preprocessed in
-            filtered_out_at_index.(index)
+            if filtered_out_at_index.(index) < num_queries
+            then 0
+            else (
+              let score = score query preprocessed in
+              filtered_out_at_index.(index)
               <- (if score = 0 then num_queries else Int.max_value);
-            score)
-        in
-        if score = 0
-        then acc
-        else (
-          (* The first component of the key compares equivalently to the pair
+              score)
+          in
+          if score = 0
+          then acc
+          else (
+            (* The first component of the key compares equivalently to the pair
                (score, index), but faster, since it is only an integer. Note
                that the map comparator doesn't need to inspect the key itself,
                since [index] already captures that ordering. Thus, this whole
                computation remains fast even if the input map comparator is
                extremely slow. *)
-          let new_key = score, key in
-          Map.add_exn acc ~key:new_key ~data:(to_result preprocessed ~key ~data))))
+            let new_key = score, key in
+            Map.add_exn acc ~key:new_key ~data:(to_result preprocessed ~key ~data))))
   ;;
 end
 

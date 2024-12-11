@@ -11,11 +11,10 @@ type 'a t =
   }
 
 let getter_setter kind =
-  let open Option.Let_syntax in
-  let%map storage =
+  let storage =
     match kind with
-    | `Local_storage -> Dom_html.window##.localStorage |> Js.Optdef.to_option
-    | `Session_storage -> Dom_html.window##.sessionStorage |> Js.Optdef.to_option
+    | `Local_storage -> Dom_html.window##.localStorage
+    | `Session_storage -> Dom_html.window##.sessionStorage
   in
   let set key value = storage##setItem (Js.string key) (Js.string value) in
   let get key =
@@ -26,11 +25,7 @@ let getter_setter kind =
 ;;
 
 let create (type a) (module M : Sexpable with type t = a) kind ~unique_id ~default =
-  let getter, setter, deleter =
-    match getter_setter kind with
-    | Some (getter, setter, delete) -> getter, setter, delete
-    | None -> (fun _key -> None), (fun _key _value -> ()), fun _key -> ()
-  in
+  let getter, setter, deleter = getter_setter kind in
   let value =
     match getter unique_id with
     | None -> default

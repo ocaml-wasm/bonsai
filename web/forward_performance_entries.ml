@@ -13,7 +13,7 @@ module Worker : sig
   (** Represents a web worker that you can send messages to. This type handles
       annoying details such as making sure that the web worker is ready to
       start receiving messages, serializing the messages, and batching several
-      of the messages together.  *)
+      of the messages together. *)
   type t
 
   (** Loads a web worker from the specified URL. [on_message] is called every
@@ -53,18 +53,18 @@ end = struct
     in
     let result = { worker; acknowledged = false; buffer = [] } in
     worker##.onmessage
-      := Dom.handler (fun (message : Js.js_string Js.t Worker.messageEvent Js.t) ->
-           result.acknowledged <- true;
-           on_message result (Js.to_string message##.data);
-           Js._false);
+    := Dom.handler (fun (message : Js.js_string Js.t Worker.messageEvent Js.t) ->
+         result.acknowledged <- true;
+         on_message result (Js.to_string message##.data);
+         Js._false);
     result
   ;;
 
   let set_error_handler t ~f =
     t.worker##.onerror
-      := Dom.handler (fun error_message ->
-           f error_message;
-           Js._false)
+    := Dom.handler (fun error_message ->
+         f error_message;
+         Js._false)
   ;;
 
   let send_message t message = t.buffer <- message :: t.buffer
@@ -91,16 +91,16 @@ let iter_entries performance_observer_entry_list ~f =
   performance_observer_entry_list##getEntries
   |> Js.to_array
   |> Array.iter ~f:(fun entry ->
-       let label =
-         let label = entry##.name |> Js.to_string in
-         match Instrumentation.extract_node_path_from_entry_label label with
-         | None -> `Other label
-         | Some node_id -> `Bonsai node_id
-       in
-       let entry_type = entry##.entryType |> Js.to_bytestring in
-       let start_time = Js.to_float entry##.startTime in
-       let duration = Js.to_float entry##.duration in
-       f { Entry.label; entry_type; start_time; duration })
+    let label =
+      let label = entry##.name |> Js.to_string in
+      match Instrumentation.extract_node_path_from_entry_label label with
+      | None -> `Other label
+      | Some node_id -> `Bonsai node_id
+    in
+    let entry_type = entry##.entryType |> Js.to_bytestring in
+    let start_time = Js.to_float entry##.startTime in
+    let duration = Js.to_float entry##.duration in
+    f { Entry.label; entry_type; start_time; duration })
 ;;
 
 let uuid_to_url ~host ~port uuid = [%string "https://%{host}:%{port#Int}/%{uuid#Uuid}"]
@@ -113,31 +113,27 @@ let generate_uuid () =
 let instrument ~host ~port ~worker_name component =
   let uuid, reused_uuid =
     let key = Js.string "bonsai-bug-session-uuid" in
-    match Js.Optdef.to_option Dom_html.window##.sessionStorage with
+    let storage = Dom_html.window##.sessionStorage in
+    match Js.Opt.to_option (storage##getItem key) with
     | None ->
-      print_endline "No session storage; generating new session uuid";
-      generate_uuid (), false
-    | Some storage ->
-      (match Js.Opt.to_option (storage##getItem key) with
+      print_endline "No prior session uuid found; generating a new one.";
+      let uuid = generate_uuid () in
+      storage##setItem key (Js.string (Uuid.to_string uuid));
+      uuid, false
+    | Some uuid_string ->
+      (match Option.try_with (fun () -> Uuid.of_string (Js.to_string uuid_string)) with
        | None ->
-         print_endline "No prior session uuid found; generating a new one.";
+         print_endline
+           "Found existing session uuid, but could not parse it; generating a new one.";
          let uuid = generate_uuid () in
          storage##setItem key (Js.string (Uuid.to_string uuid));
          uuid, false
-       | Some uuid_string ->
-         (match Option.try_with (fun () -> Uuid.of_string (Js.to_string uuid_string)) with
-          | None ->
-            print_endline
-              "Found existing session uuid, but could not parse it; generating a new one.";
-            let uuid = generate_uuid () in
-            storage##setItem key (Js.string (Uuid.to_string uuid));
-            uuid, false
-          | Some uuid ->
-            print_endline
-              "Re-using existing session uuid. If you no longer have the debugger window \
-               open, you can use the following link:";
-            print_endline (uuid_to_url ~host ~port uuid);
-            uuid, true))
+       | Some uuid ->
+         print_endline
+           "Re-using existing session uuid. If you no longer have the debugger window \
+            open, you can use the following link:";
+         print_endline (uuid_to_url ~host ~port uuid);
+         uuid, true)
   in
   if not reused_uuid
   then (
@@ -186,8 +182,8 @@ let instrument ~host ~port ~worker_name component =
     Worker.create
       ~url:[%string "https://%{host}:%{port#Int}/%{worker_name}"]
       ~on_message:(fun worker _ ->
-      if not !got_first_message then got_first_message := true;
-      on_first_message worker)
+        if not !got_first_message then got_first_message := true;
+        on_first_message worker)
   in
   let component =
     Bonsai.Private.Graph_info.iter_graph_updates component ~on_update:(fun gi ->

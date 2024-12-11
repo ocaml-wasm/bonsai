@@ -4,9 +4,9 @@ open Bonsai.Let_syntax
 open Js_of_ocaml
 
 module Style =
-[%css
-stylesheet
-  {|
+  [%css
+  stylesheet
+    {|
   .no_select {
     user-select: none;
   }
@@ -40,8 +40,8 @@ module State_machine_model = struct
     { source : 'source_id
     ; target : 'target_id option
         (* If [has_moved] is false, then the mouse has been clicked, but we do
-       not yet consider the dragging to have started, so for all visual
-       purposes we are [Not_dragging]. *)
+           not yet consider the dragging to have started, so for all visual
+           purposes we are [Not_dragging]. *)
     ; has_moved : bool
     ; offset : Position.t
     ; position : Position.t
@@ -150,14 +150,14 @@ module For_testing = struct
   end
 
   module Inject_hook = Vdom.Attr.No_op_hook (struct
-    module Input = struct
-      type t = Action.t -> unit Effect.t [@@deriving sexp]
+      module Input = struct
+        type t = Action.t -> unit Effect.t [@@deriving sexp]
 
-      let combine _ second = second
-    end
+        let combine _ second = second
+      end
 
-    let name = "dnd-test-hook"
-  end)
+      let name = "dnd-test-hook"
+    end)
 
   let type_id = Inject_hook.type_id
 end
@@ -203,54 +203,58 @@ let create
       on_drop
       ~default_model:Not_dragging
       ~apply_action:(fun context on_drop model actions ->
-      match on_drop with
-      | Active on_drop ->
-        List.fold actions ~init:model ~f:(fun model action ->
-          match action with
-          | Action.Started_drag { source; offset; position; size } ->
-            (match model with
-             | State_machine_model.Not_dragging -> ()
-             | Dragging _ -> bug "Started dragging before dragging finished");
-            Dragging { source; offset; position; size; target = None; has_moved = false }
-          | Set_target target ->
-            (match model with
-             | State_machine_model.Not_dragging -> Not_dragging
-             | Dragging t -> Dragging { t with target })
-          | Finished_drag ->
-            (match model with
-             | State_machine_model.Not_dragging | Dragging { target = None; _ } ->
-               Not_dragging
-             | Dragging { source; target = Some target; _ } ->
-               Bonsai.Apply_action_context.schedule_event context (on_drop source target);
-               Not_dragging)
-          | Mouse_moved position ->
-            (match model with
-             | State_machine_model.Not_dragging -> Not_dragging
-             | Dragging t -> Dragging { t with position; has_moved = true }))
-      | Inactive ->
-        eprint_s
-          [%message
-            [%here]
-              "An action sent to a [state_machine1] has been dropped because its input \
-               was not present. This happens when the [state_machine1] is inactive when \
-               it receives a message."
-              (actions : (Source.t, Target.t) Action.t list)];
-        model)
+        match on_drop with
+        | Active on_drop ->
+          List.fold actions ~init:model ~f:(fun model action ->
+            match action with
+            | Action.Started_drag { source; offset; position; size } ->
+              (match model with
+               | State_machine_model.Not_dragging -> ()
+               | Dragging _ -> bug "Started dragging before dragging finished");
+              Dragging
+                { source; offset; position; size; target = None; has_moved = false }
+            | Set_target target ->
+              (match model with
+               | State_machine_model.Not_dragging -> Not_dragging
+               | Dragging t -> Dragging { t with target })
+            | Finished_drag ->
+              (match model with
+               | State_machine_model.Not_dragging | Dragging { target = None; _ } ->
+                 Not_dragging
+               | Dragging { source; target = Some target; _ } ->
+                 Bonsai.Apply_action_context.schedule_event
+                   context
+                   (on_drop source target);
+                 Not_dragging)
+            | Mouse_moved position ->
+              (match model with
+               | State_machine_model.Not_dragging -> Not_dragging
+               | Dragging t -> Dragging { t with position; has_moved = true }))
+        | Inactive ->
+          eprint_s
+            [%message
+              [%here]
+                "An action sent to a [state_machine1] has been dropped because its input \
+                 was not present. This happens when the [state_machine1] is inactive \
+                 when it receives a message."
+                (actions : (Source.t, Target.t) Action.t list)];
+          model)
   in
   let%sub source =
     let%arr inject = inject in
     fun ~id ->
       Vdom.Attr.many
         [ Vdom.Attr.on_pointerdown (fun event ->
-            let position = { Position.x = Js.to_float event##.clientX; y = Js.to_float event##.clientY } in
+            let position =
+              { Position.x = Js.to_float event##.clientX
+              ; y = Js.to_float event##.clientY
+              }
+            in
             let bounding_rect =
               (Js.Opt.to_option event##.currentTarget |> Option.value_exn)##getBoundingClientRect
             in
-            let optdef_float x =
-              x |> Js.Optdef.to_option |> Option.value_exn |> Js.to_float |> Int.of_float
-            in
-            let width = optdef_float bounding_rect##.width in
-            let height = optdef_float bounding_rect##.height in
+            let width = Int.of_float (Js.to_float bounding_rect##.width) in
+            let height = Int.of_float (Js.to_float bounding_rect##.height) in
             let top = Js.to_float bounding_rect##.top in
             let left = Js.to_float bounding_rect##.left in
             let size = { Size.width; height } in
@@ -286,13 +290,13 @@ let create
         Dom_html.Event.pointermove
         path_for_pointermove
         (fun (event : Dom_html.pointerEvent Js.t) ->
-        let (event
-              : < composedPath : 'a Js.js_array Js.t Js.meth ; Dom_html.pointerEvent >
-                Js.t)
-          =
-          Js.Unsafe.coerce event
-        in
-        (* Why client coordinates and not page or screen coordinates. I've
+           let (event
+                 : < composedPath : 'a Js.js_array Js.t Js.meth ; Dom_html.pointerEvent >
+                     Js.t)
+             =
+             Js.Unsafe.coerce event
+           in
+           (* Why client coordinates and not page or screen coordinates. I've
               tested with all three and client coordinates is clearly the
               correct choice.
 
@@ -310,23 +314,25 @@ let create
 
               It makes sense that client coordinates is correct because the
               dragged element itself uses fixed positioning, which is roughly
-              equivalent to client coordinates.  *)
-        let position = { Position.x = Js.to_float event##.clientX; y = Js.to_float event##.clientY } in
-        let path = Js.to_array event##composedPath |> Array.to_list in
-        let target =
-          List.find_map path ~f:(fun element ->
-            let%bind.Option dataset = Js.Opt.to_option element##.dataset in
-            let%map.Option drag_target =
-              Js.Opt.to_option (Js.Unsafe.get dataset ("dragTarget" ^ universe_suffix))
-            in
-            let drag_target = Js.to_string drag_target in
-            Target.t_of_sexp (Sexp.of_string drag_target))
-        in
-        Effect.Expert.handle_non_dom_event_exn
-          (match Bonsai_web.am_within_disabled_fieldset event with
-           | true -> inject [ Set_target None; Mouse_moved position ]
-           | false -> inject [ Set_target target; Mouse_moved position ]);
-        Js._true)
+              equivalent to client coordinates. *)
+           let position =
+             { Position.x = Js.to_float event##.clientX; y = Js.to_float event##.clientY }
+           in
+           let path = Js.to_array event##composedPath |> Array.to_list in
+           let target =
+             List.find_map path ~f:(fun element ->
+               let%bind.Option dataset = Js.Opt.to_option element##.dataset in
+               let%map.Option drag_target =
+                 Js.Opt.to_option (Js.Unsafe.get dataset ("dragTarget" ^ universe_suffix))
+               in
+               let drag_target = Js.to_string drag_target in
+               Target.t_of_sexp (Sexp.of_string drag_target))
+           in
+           Effect.Expert.handle_non_dom_event_exn
+             (match Bonsai_web.am_within_disabled_fieldset event with
+              | true -> inject [ Set_target None; Mouse_moved position ]
+              | false -> inject [ Set_target target; Mouse_moved position ]);
+           Js._true)
     in
     add_event_listener Dom_html.Event.pointerup path_for_pointerup (fun event ->
       Effect.Expert.handle_non_dom_event_exn
@@ -388,7 +394,8 @@ let dragged_element t ~f =
                   @> height (`Px size.height)
                   @> create
                        ~field:"transform"
-                       ~value:[%string "translateY(%{y#Float}px) translateX(%{x#Float}px)"]))
+                       ~value:
+                         [%string "translateY(%{y#Float}px) translateX(%{x#Float}px)"]))
         ]
       [ item ]
 ;;
