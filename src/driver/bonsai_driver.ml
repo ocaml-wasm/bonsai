@@ -42,6 +42,21 @@ let assert_type_equalities
   ()
 ;;
 
+let define_ui_effect (type action) () =
+  let queue = Queue.create () in
+  let module A =
+    Ui_effect.Define (struct
+      module Action = struct
+        type t = action Action.t
+      end
+
+      let handle = Queue.enqueue queue
+    end)
+  in
+  let inject = A.inject in
+  inject, queue
+;;
+
 let create_direct
   (type r)
   ?(optimize = true)
@@ -92,17 +107,9 @@ let create_direct
     apply_action
     : r t
     =
-    let queue = Queue.create () in
-    let module A =
-      Ui_effect.Define (struct
-        module Action = struct
-          type t = action Action.t
-        end
-
-        let handle = Queue.enqueue queue
-      end)
-    in
-    let inject = A.inject in
+    (* Call [define_ui_effect] twice to prevent inlining *)
+    ignore (define_ui_effect ());
+    let inject, queue = define_ui_effect () in
     let sexp_of_action = Action.Type_id.to_sexp computation_info.action in
     let snapshot, () =
       computation_info.run
