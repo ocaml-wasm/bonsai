@@ -851,7 +851,7 @@ module type S = sig
         -> ?equal_result:('o -> 'o -> bool)
         -> ('o, 'r) Starting.t
         -> 'a Value.t
-        -> effect:('a -> 'o Effect.t) Value.t
+        -> effct:('a -> 'o Effect.t) Value.t
         -> 'r Computation.t
 
       val manual_refresh
@@ -859,7 +859,7 @@ module type S = sig
         -> ?sexp_of_model:('o -> Sexp.t)
         -> ?equal:('o -> 'o -> bool)
         -> ('o, 'r) Starting.t
-        -> effect:'o Effect.t Value.t
+        -> effct:'o Effect.t Value.t
         -> ('r * unit Effect.t) Computation.t
     end
   end

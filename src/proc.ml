@@ -720,7 +720,7 @@ module Edge = struct
       ?equal
       ~initial
       ~wrap_result
-      ~effect
+      ~effct
       ()
       =
       let open Let_syntax_with_map_location (struct
@@ -773,9 +773,9 @@ module Edge = struct
           ()
       in
       let%sub callback =
-        let%arr effect and next_seqnum and inject_change in
+        let%arr effct and next_seqnum and inject_change in
         let%bind.Effect seqnum = next_seqnum () in
-        let%bind.Effect result = effect in
+        let%bind.Effect result = effct in
         inject_change (Action.Set (seqnum, wrap_result result))
       in
       let%arr { State.last_result; _ } = state
@@ -789,17 +789,17 @@ module Edge = struct
         -> ?sexp_of_model:(o -> Sexp.t)
         -> ?equal:(o -> o -> bool)
         -> (o, r) Starting.t
-        -> effect:o Effect.t Value.t
+        -> effct:o Effect.t Value.t
         -> (r * unit Effect.t) Computation.t
       =
-      fun ?(here = Stdlib.Lexing.dummy_pos) ?sexp_of_model ?equal kind ~effect ->
+      fun ?(here = Stdlib.Lexing.dummy_pos) ?sexp_of_model ?equal kind ~effct ->
       match kind with
       | Starting.Empty ->
         manual_refresh_implementation
           ~here
           ?sexp_of_model:(Option.map ~f:Option.sexp_of_t sexp_of_model)
           ?equal:(Option.map ~f:Option.equal equal)
-          ~effect
+          ~effct
           ~initial:None
           ~wrap_result:Option.some
           ()
@@ -808,7 +808,7 @@ module Edge = struct
           ~here
           ?sexp_of_model
           ?equal
-          ~effect
+          ~effct
           ~initial
           ~wrap_result:Fn.id
           ()
@@ -823,7 +823,7 @@ module Edge = struct
         -> ?equal_result:(o -> o -> bool)
         -> (o, r) Starting.t
         -> a Value.t
-        -> effect:(a -> o Effect.t) Value.t
+        -> effct:(a -> o Effect.t) Value.t
         -> r Computation.t
       =
       fun ?(here = Stdlib.Lexing.dummy_pos)
@@ -833,19 +833,19 @@ module Edge = struct
         ?equal_result
         kind
         input
-        ~effect ->
+        ~effct ->
       let open Let_syntax_with_map_location (struct
           let here = here
         end) in
       let%sub get_input = yoink ~here input in
-      let%sub effect =
-        let%arr get_input and effect in
+      let%sub effct =
+        let%arr get_input and effct in
         let%bind.Effect input =
           match%bind.Effect get_input with
           | Active input -> Effect.return input
           | Inactive -> Effect.never
         in
-        effect input
+        effct input
       in
       let%sub result, refresh =
         manual_refresh
@@ -853,7 +853,7 @@ module Edge = struct
           ?sexp_of_model:sexp_of_result
           ?equal:equal_result
           kind
-          ~effect
+          ~effct
       in
       let%sub callback =
         let%arr refresh in
@@ -905,7 +905,7 @@ module Effect_throttling = struct
       -> (a -> b Effect.t) Value.t
       -> (a -> b Poll_result.t Effect.t) Computation.t
     =
-    fun ?(here = Stdlib.Lexing.dummy_pos) effect ->
+    fun ?(here = Stdlib.Lexing.dummy_pos) effct ->
     let open Let_syntax_with_map_location (struct
         let here = here
       end) in
@@ -940,14 +940,14 @@ module Effect_throttling = struct
            reasonable to me. *)
         ~reset:(fun (_ : _ Apply_action_context.t) model -> model)
         ~default_model:{ running = false; next_up = None }
-        ~apply_action:(fun context effect { running; next_up } action ->
+        ~apply_action:(fun context effct { running; next_up } action ->
           let { Apply_action_context.Private.inject; schedule_event; time_source = _ } =
             Apply_action_context.Private.reveal context
           in
-          let run_effect effect callback =
+          let run_effect effct callback =
             schedule_event
               (let%bind.Effect response =
-                 effect (Effect.Private.Callback.request callback)
+                 effct (Effect.Private.Callback.request callback)
                in
                let%bind.Effect () =
                  Effect.Private.Callback.respond_to
@@ -972,19 +972,19 @@ module Effect_throttling = struct
              be factored to be shorter, but the advantage to this is that every
              case is extremely short, and it's easy to find which code path a
              set of variable configurations will take. *)
-          match action, running, next_up, effect with
+          match action, running, next_up, effct with
           | Run callback, false, None, Inactive ->
             { running = false; next_up = Some callback }
-          | Run callback, false, None, Active effect ->
-            run_effect effect callback;
+          | Run callback, false, None, Active effct ->
+            run_effect effct callback;
             { running = true; next_up = None }
           | Run callback, false, Some next_up, Inactive ->
             abort next_up;
             { running = false; next_up = Some callback }
-          | Run callback, false, Some next_up, Active effect ->
+          | Run callback, false, Some next_up, Active effct ->
             (* This case is untested because I couldn't figure out how to reach
                this code path in tests. It seems impossible. *)
-            run_effect effect next_up;
+            run_effect effct next_up;
             { running = true; next_up = Some callback }
           | Run callback, true, None, (Inactive | Active _) ->
             { running = true; next_up = Some callback }
@@ -1000,8 +1000,8 @@ module Effect_throttling = struct
                doesn't have access to the input. *)
             { running; next_up }
           | Activate, false, None, Active _ -> { running = false; next_up = None }
-          | Activate, false, Some next_up, Active effect ->
-            run_effect effect next_up;
+          | Activate, false, Some next_up, Active effct ->
+            run_effect effct next_up;
             { running = true; next_up = None }
           | Activate, true, next_up, Active _ -> { running = true; next_up }
           | Finished, running, None, (Inactive | Active _) ->
@@ -1010,11 +1010,11 @@ module Effect_throttling = struct
           | Finished, running, Some next_up, Inactive ->
             soft_assert_running [%here] running;
             { running = false; next_up = Some next_up }
-          | Finished, running, Some next_up, Active effect ->
+          | Finished, running, Some next_up, Active effct ->
             soft_assert_running [%here] running;
-            run_effect effect next_up;
+            run_effect effct next_up;
             { running = true; next_up = None })
-        effect
+        effct
     in
     let%sub on_activate =
       let%arr inject in
