@@ -647,7 +647,7 @@ module Edge : sig
       -> ?equal_result:('o -> 'o -> bool)
       -> ('o, 'r) Starting.t
       -> 'a t
-      -> effect:('a -> 'o Effect.t) t
+      -> effct:('a -> 'o Effect.t) t
       -> graph
       -> 'r t
 
@@ -659,7 +659,7 @@ module Edge : sig
       -> ?sexp_of_model:('o -> Sexp.t)
       -> ?equal:('o -> 'o -> bool)
       -> ('o, 'r) Starting.t
-      -> effect:'o Effect.t t
+      -> effct:'o Effect.t t
       -> graph
       -> 'r t * unit Effect.t t
   end
@@ -1387,7 +1387,7 @@ module For_proc : sig
     -> ?sexp_of_model:('o -> Sexp.t)
     -> ?equal:('o -> 'o -> bool)
     -> ('o, 'r) Edge.Poll.Starting.t
-    -> effect:'o Effect.t t
+    -> effct:'o Effect.t t
     -> graph
     -> ('r * unit Effect.t) t
 

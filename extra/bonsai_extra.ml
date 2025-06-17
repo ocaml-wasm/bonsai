@@ -155,7 +155,7 @@ let state_dynamic_model ?sexp_of_model ?equal ~model graph =
     graph
 ;;
 
-let exactly_once effect graph =
+let exactly_once effct graph =
   let has_run, set_has_run =
     Bonsai.state ~equal:[%equal: Bool.t] false ~sexp_of_model:[%sexp_of: Bool.t] graph
   in
@@ -166,7 +166,7 @@ let exactly_once effect graph =
       Bonsai.Edge.lifecycle
         ~on_activate:
           (let%map set_has_run
-           and event = effect in
+           and event = effct in
            Effect.Many [ set_has_run true; event ])
         graph;
       Bonsai.return ())
@@ -174,15 +174,15 @@ let exactly_once effect graph =
   ()
 ;;
 
-let exactly_once_with_value ?sexp_of_model ?equal effect graph =
+let exactly_once_with_value ?sexp_of_model ?equal effct graph =
   let value, set_value = Bonsai.state_opt ?sexp_of_model ?equal graph in
   let%sub () =
     match%sub value with
     | None ->
       Bonsai.Edge.lifecycle
         ~on_activate:
-          (let%map set_value and effect in
-           let%bind.Effect r = effect in
+          (let%map set_value and effct in
+           let%bind.Effect r = effct in
            set_value (Some r))
         graph;
       Bonsai.return ()
@@ -558,7 +558,7 @@ module One_at_a_time = struct
     [@@deriving sexp]
   end
 
-  let effect f graph =
+  let effect_ f graph =
     let status, inject_status =
       Bonsai.actor
         graph
@@ -577,7 +577,7 @@ module One_at_a_time = struct
             Busy, response
           | Release -> Idle, true)
     in
-    let effect =
+    let effct =
       let%arr inject_status and f in
       let open Effect.Let_syntax in
       fun query ->
@@ -588,7 +588,7 @@ module One_at_a_time = struct
           let%map (_ : bool) = inject_status Release in
           Response.Result result
     in
-    effect, status
+    effct, status
   ;;
 end
 
@@ -596,8 +596,8 @@ let bonk graph =
   let (_ : unit Bonsai.t), bonk =
     Bonsai.state_machine
       ~default_model:()
-      ~apply_action:(fun context () effect ->
-        Bonsai.Apply_action_context.schedule_event context effect)
+      ~apply_action:(fun context () effct ->
+        Bonsai.Apply_action_context.schedule_event context effct)
       graph
   in
   bonk
@@ -612,11 +612,11 @@ let chain_incr_effects input graph =
         match input, effect_fns with
         | Bonsai.Computation_status.Inactive, _ | _, [] -> ()
         | Active input, effect_fn :: dependents ->
-          let effect =
+          let effct =
             let%bind.Ui_effect () = effect_fn input in
             Bonsai.Apply_action_context.inject ctx dependents
           in
-          Bonsai.Apply_action_context.schedule_event ctx effect)
+          Bonsai.Apply_action_context.schedule_event ctx effct)
       graph
   in
   inject
